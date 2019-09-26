@@ -3,25 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Unit : MonoBehaviour {
-	[SerializeField] Shooter_line _shooter;
+	[SerializeField] Shooter_arc _shooter_arc;
 	[SerializeField] float _shot_cd = 0;
 	float _time_cd;
 
 	[SerializeField] GameObject _target;
 
 	void Start() {
-		if (!_shooter) {
-			Debug.Log("No Shooter assigned!");
-		}
-
-		_time_cd = Time.time;
+		_time_cd = 0;
 	}
 
 	void Update() {
-		if (Time.time > _time_cd) {
-			_time_cd = Time.time + _shot_cd;
-			transform.LookAt(_target.transform.position);
-			_shooter.Shoot(_target);
+		_time_cd += Time.deltaTime;
+		if (_shot_cd < _time_cd) {
+			_time_cd = 0;
+
+			transform.LookAt(new Vector3(_target.transform.position.x, transform.position.y, _target.transform.position.z));
+			_shooter_arc.Shoot(_target);
 		}
 	}
 }
